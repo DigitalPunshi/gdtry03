@@ -1090,12 +1090,18 @@
             const advance = parseFloat(data.advance || "0");
             const bal = rawTotal - advance;
             
+            // Get the number. If it's missing or 'Walk-in', prompt the user for it.
+            let number = (data.table && data.table !== 'Walk-in') ? data.table : '';
+            if (!number) {
+                number = prompt("Enter customer mobile number (without +91):", "");
+                if (!number) return; // Cancel if the user clicks 'Cancel' or leaves it blank
+            }
+            
             // Create a direct link to the Apps Script lookup for this specific order
             const receiptLink = `${GOOGLE_SCRIPT_URL}?orderId=${encodeURIComponent(data.orderId)}`;
             
             let waMessage = `*${STORE_NAME}*\n------------------------\n*Order ID:* ${data.orderId}\n*Date:* ${new Date(data.date).toLocaleDateString()}\n*Customer:* ${data.name}\n\n*Items:*\n${data.items}\n------------------------\n*Grand Total: ₹${rawTotal.toFixed(2)}*\n*Advance Paid: ₹${advance.toFixed(2)}*\n*Balance Due: ₹${bal.toFixed(2)}*\n\n*View Order Record:*\n${receiptLink}\n\nThank you for shopping with us!`;
             
-            const number = (data.table && data.table !== 'Walk-in') ? data.table : '';
             window.open(`https://api.whatsapp.com/send?phone=91${number}&text=${encodeURIComponent(waMessage)}`, '_blank');
         }
 
