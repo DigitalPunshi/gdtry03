@@ -1033,7 +1033,7 @@
             document.getElementById('s-preview-section').classList.add('hidden');
             fetchBtn.innerHTML = `Searching...`; fetchBtn.disabled = true;
 
-            fetch(`${GOOGLE_SCRIPT_URL}?orderId=${encodeURIComponent(orderId)}`)
+            fetch(`${GOOGLE_SCRIPT_URL}?orderId=${encodeURIComponent(orderId)}&json=true`)
                 .then(response => response.json())
                 .then(data => {
                     fetchBtn.innerHTML = `Find Order`; fetchBtn.disabled = false;
